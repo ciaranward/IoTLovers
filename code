@@ -1,6 +1,7 @@
-#include <LiquidCrystal.h>
-LiquidCrystal lcd(7,8,10,11,12,13);
- 
+#include <Wire.h>
+#include "rgb_lcd.h"
+
+rgb_lcd lcd;
 int num_Measure = 128 ; // Set the number of measurements   
 int pinSignal = A0; // pin connected to pin O module sound sensor  
 int redLed = 5; 
@@ -9,23 +10,25 @@ long sum = 0 ; // Store the total value of n measurements
 long level = 0 ; // Store the average value   
 int soundlow = 40;
 int soundmedium = 500;
- 
+const int colorR = 0;
+const int colorG = 255;
+const int colorB = 0;
 void setup ()  
 {   
   pinMode (pinSignal, INPUT); // Set the signal pin as input   
   Serial.begin (9600); 
   lcd.begin(16,2); 
+  lcd.setRGB(colorR, colorG, colorB);
 }  
-   
 void loop ()  
 {  
+  lcd.setCursor(0, 1);
   // Performs 128 signal readings   
   for ( int i = 0 ; i <num_Measure; i ++)  
   {  
-   Sound_signal = analogRead (pinSignal);  
+   Sound_signal = analogRead(pinSignal);  
     sum =sum + Sound_signal;  
   }  
- 
   level = sum / num_Measure; // Calculate the average value   
   Serial.print("Sound Level: ");
   lcd.print("Sound Level= ");
